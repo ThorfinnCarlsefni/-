@@ -1,0 +1,83 @@
+views.py
+
+from django.http import HttpResponse
+import requests
+from django.http import JsonResponse
+from django.shortcuts import render
+import json
+from django.views.decorators.csrf import csrf_exempt
+
+def home(request):
+    return HttpResponse("Добро пожаловать на главную страницу!")
+def get_example(request):
+    response = requests.get('https://jsonplaceholder.typicode.com/posts/1')
+    return render(request, 'myapp/get_example.html', {'data': response.json()})
+@csrf_exempt
+def post_example(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        return JsonResponse({'status': 'success', 'received_data': data})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+def api_example(request):
+    if request.method == 'GET':
+        return JsonResponse({'message': 'Это GET-запрос'})
+    elif request.method == 'POST':
+        return JsonResponse({'message': 'Это POST-запрос', 'data': request.POST})
+
+
+urls.py
+
+from django.urls import  path
+from myapp import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('get-example/', views.get_example, name='get_example'),
+    path('post-example/', views.post_example, name='post_example'),
+    path('api-example/', views.api_example, name='api_example'),
+]
+
+
+C:\Users\rbake\Desktop\dsfsdf\myproject\myapp\templates\myapp\get_example.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GET Example</title>
+</head>
+<body>
+    <h1>Данные из GET-запроса:</h1>
+    <p>ID: {{ data.id }}</p>
+    <p>Title: {{ data.title }}</p>
+    <p>Body: {{ data.body }}</p>
+</body>
+</html>
+
+skladjaksldk
+
+import requests
+
+url = 'http://127.0.0.1:8000/post-example/'
+data = {'key': 'value'}
+response = requests.post(url, json=data)
+print(response.json())
+
+kjhdsakjdhaskj
+
+import requests
+
+url = 'https://jsonplaceholder.typicode.com/posts/1'  # Пример URL
+response = requests.get(url)
+
+# Проверяем статус ответа
+print("Status Code:", response.status_code)
+
+# Проверяем содержимое ответа
+print("Response Text:", response.text)
+
+# Пытаемся преобразовать в JSON
+try:
+    data = response.json()
+    print("JSON Data:", data)
+except requests.exceptions.JSONDecodeError as e:
+    print("JSON Decode Error:", e)
