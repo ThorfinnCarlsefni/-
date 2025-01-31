@@ -53,31 +53,38 @@ C:\Users\rbake\Desktop\dsfsdf\myproject\myapp\templates\myapp\get_example.html
 </body>
 </html>
 
-skladjaksldk
-
 import requests
 
-url = 'http://127.0.0.1:8000/post-example/'
-data = {'key': 'value'}
-response = requests.post(url, json=data)
-print(response.json())
+# Базовый URL API
+BASE_URL = 'http://127.0.0.1:8000'
 
-kjhdsakjdhaskj
+# Тестирование GET-запроса для get-example
+def test_get_example():
+    response = requests.get(f'{BASE_URL}/get-example/')
+    print("GET Request to Get Example:")
+    print("Status Code:", response.status_code)
+    print("Response Text:", response.text)  # HTML-ответ
+    print()
 
-import requests
+# Тестирование POST-запроса для post-example
+def test_post_example():
+    data = {'key': 'value'}  # Данные для отправки
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(f'{BASE_URL}/post-example/', json=data, headers=headers)
+    print("POST Request to Post Example:")
+    print("Status Code:", response.status_code)
+    print("Response JSON:", response.json())
+    print()
 
-url = 'https://jsonplaceholder.typicode.com/posts/1'  # Пример URL
-response = requests.get(url)
+# Тестирование GET-запроса для api-example
+def test_api_get_example():
+    response = requests.get(f'{BASE_URL}/api-example/')
+    print("GET Request to API Example:")
+    print("Status Code:", response.status_code)
+    print("Response JSON:", response.json())
+    print()
 
-# Проверяем статус ответа
-print("Status Code:", response.status_code)
-
-# Проверяем содержимое ответа
-print("Response Text:", response.text)
-
-# Пытаемся преобразовать в JSON
-try:
-    data = response.json()
-    print("JSON Data:", data)
-except requests.exceptions.JSONDecodeError as e:
-    print("JSON Decode Error:", e)
+if __name__ == "__main__":
+    test_get_example()
+    test_post_example()
+    test_api_get_example()
